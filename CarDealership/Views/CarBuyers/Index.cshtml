@@ -1,0 +1,39 @@
+﻿@model IEnumerable<CarDealership.Models.CarBuyer>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Buyer.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Car.VinNumber)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Buyer.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Car.VinNumber)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Car_BuyerID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Car_BuyerID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Car_BuyerID })
+        </td>
+    </tr>
+}
+
+</table>

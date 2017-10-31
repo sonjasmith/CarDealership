@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CarDealershipModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Buyer">
+    <Key>
+      <PropertyRef Name="BuyerID" />
+    </Key>
+    <Property Name="BuyerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LicenseNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="CarBuyers" Relationship="Self.FK_CarBuyer_Buyer" FromRole="Buyer" ToRole="CarBuyer" />
+  </EntityType>
+  <EntityType Name="Car">
+    <Key>
+      <PropertyRef Name="CarID" />
+    </Key>
+    <Property Name="CarID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="VinNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="CarMake" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="CarModel" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ModelYear" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="CarBuyers" Relationship="Self.FK_CarBuyer_Car" FromRole="Car" ToRole="CarBuyer" />
+  </EntityType>
+  <EntityType Name="CarBuyer">
+    <Key>
+      <PropertyRef Name="Car_BuyerID" />
+    </Key>
+    <Property Name="Car_BuyerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CarID" Type="Int32" Nullable="false" />
+    <Property Name="BuyerID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Buyer" Relationship="Self.FK_CarBuyer_Buyer" FromRole="CarBuyer" ToRole="Buyer" />
+    <NavigationProperty Name="Car" Relationship="Self.FK_CarBuyer_Car" FromRole="CarBuyer" ToRole="Car" />
+  </EntityType>
+  <Association Name="FK_CarBuyer_Buyer">
+    <End Role="Buyer" Type="Self.Buyer" Multiplicity="1" />
+    <End Role="CarBuyer" Type="Self.CarBuyer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Buyer">
+        <PropertyRef Name="BuyerID" />
+      </Principal>
+      <Dependent Role="CarBuyer">
+        <PropertyRef Name="BuyerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CarBuyer_Car">
+    <End Role="Car" Type="Self.Car" Multiplicity="1" />
+    <End Role="CarBuyer" Type="Self.CarBuyer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Car">
+        <PropertyRef Name="CarID" />
+      </Principal>
+      <Dependent Role="CarBuyer">
+        <PropertyRef Name="CarID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CarDealershipEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Buyers" EntityType="Self.Buyer" />
+    <EntitySet Name="Cars" EntityType="Self.Car" />
+    <EntitySet Name="CarBuyers" EntityType="Self.CarBuyer" />
+    <AssociationSet Name="FK_CarBuyer_Buyer" Association="Self.FK_CarBuyer_Buyer">
+      <End Role="Buyer" EntitySet="Buyers" />
+      <End Role="CarBuyer" EntitySet="CarBuyers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CarBuyer_Car" Association="Self.FK_CarBuyer_Car">
+      <End Role="Car" EntitySet="Cars" />
+      <End Role="CarBuyer" EntitySet="CarBuyers" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

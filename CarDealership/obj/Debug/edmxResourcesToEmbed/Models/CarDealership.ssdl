@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CarDealershipModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Buyer">
+    <Key>
+      <PropertyRef Name="BuyerID" />
+    </Key>
+    <Property Name="BuyerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="LicenseNumber" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="PhoneNumber" Type="nvarchar" MaxLength="10" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Car">
+    <Key>
+      <PropertyRef Name="CarID" />
+    </Key>
+    <Property Name="CarID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VinNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="CarMake" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="CarModel" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ModelYear" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CarBuyer">
+    <Key>
+      <PropertyRef Name="Car_BuyerID" />
+    </Key>
+    <Property Name="Car_BuyerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CarID" Type="int" Nullable="false" />
+    <Property Name="BuyerID" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_CarBuyer_Buyer">
+    <End Role="Buyer" Type="Self.Buyer" Multiplicity="1" />
+    <End Role="CarBuyer" Type="Self.CarBuyer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Buyer">
+        <PropertyRef Name="BuyerID" />
+      </Principal>
+      <Dependent Role="CarBuyer">
+        <PropertyRef Name="BuyerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CarBuyer_Car">
+    <End Role="Car" Type="Self.Car" Multiplicity="1" />
+    <End Role="CarBuyer" Type="Self.CarBuyer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Car">
+        <PropertyRef Name="CarID" />
+      </Principal>
+      <Dependent Role="CarBuyer">
+        <PropertyRef Name="CarID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CarDealershipModelStoreContainer">
+    <EntitySet Name="Buyer" EntityType="Self.Buyer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Car" EntityType="Self.Car" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CarBuyer" EntityType="Self.CarBuyer" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_CarBuyer_Buyer" Association="Self.FK_CarBuyer_Buyer">
+      <End Role="Buyer" EntitySet="Buyer" />
+      <End Role="CarBuyer" EntitySet="CarBuyer" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CarBuyer_Car" Association="Self.FK_CarBuyer_Car">
+      <End Role="Car" EntitySet="Car" />
+      <End Role="CarBuyer" EntitySet="CarBuyer" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
